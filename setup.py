@@ -13,7 +13,7 @@ Path("logs/remover.log").touch()
 Path("logs/updater.log").touch()
 
 
-connection = sqlite3.connect('file_integrity_checker.db')
+connection = sqlite3.connect('db/file_integrity_checker.db')
 cursor = connection.cursor()
 
 cursor.execute("""

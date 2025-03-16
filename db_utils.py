@@ -2,7 +2,7 @@ import sqlite3
 
 class DBManager:
     def __init__(self):
-        self.conn = sqlite3.connect('file_integrity_checker.db')
+        self.conn = sqlite3.connect('db/file_integrity_checker.db')
         self.cursor = self.conn.cursor()
 
     
