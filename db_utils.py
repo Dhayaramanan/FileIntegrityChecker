@@ -14,13 +14,14 @@ class DBManager:
     def add(self, filepath, filehash):
         if self.check_if_file_exists(filepath):
             print(f"File '{filepath}' already exists in the database.")
-            return
+            return 'ALREADY EXISTS'
     
         self.cursor.execute("""
             INSERT INTO file_hashes (file_path, hash_value) VALUES (?, ?);
         """, (filepath, filehash))
         print(f"Added '{filepath}' to the database.")
         self.conn.commit()
+        return 'ADDED'
 
 
     def remove(self, filepath):
@@ -37,13 +38,15 @@ class DBManager:
         if not self.check_if_file_exists(filepath):
             print(f"File '{filepath}' not found in the database. Adding it to the database.")
             self.add(filepath, filehash)
-            return
+            return (0, None, filehash)
+        old_hash = self.cursor.fetchone()[0]
 
         self.cursor.execute("""
             UPDATE file_hashes SET hash_value = ? WHERE file_path = ?;
         """, (filehash, filepath))
         self.conn.commit()
         print(f"Updated hash for '{filepath}'.")
+        return (1, old_hash, filehash)
 
 
     def read(self, filepath):
